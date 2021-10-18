@@ -1,0 +1,27 @@
+#file-to-upload {
+	display: none;
+}
+
+.options{
+	display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+	color: white;
+	background-color: #43B0F9;
+	display: flex;
+	padding: 15px;
+	border-radius: 10px;
+	font-size: 13px;
+	line-height: 24px;
+	cursor: pointer;
+	transition: all 0.3s;
+	margin: 0 6px;
+	text-decoration: none;
+}
+
+.btn:hover {
+	background-color: #3695d4;
+}
