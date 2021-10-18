@@ -9,7 +9,23 @@
 
 <body>
 
-dfgdfgdf
+	<div class="container">
+		<input type="file" id="file-to-upload" accept="application/pdf" />
+		<div class="options">
+			<div class="btn" id="upload-button">Upload PDF</div>
+			<a class="btn" id="download-image" style="display: none;">Download PNG</a>
+			<div class="btn" id="new-upload" style="display: none;">New Upload</div>
+		</div>
+		<div id="pdf-container" style="display: none;">
+			<canvas id="pdf-canvas" width="400"></canvas>
+		</div>
+	</div>
+
+	<script src="./js/jquery.js"></script>
+	<script src="./js/pdf.js"></script>
+	<script src="./js/pdf.worker.js"></script>
+	<script src="./js/converter.js"></script>
+	<script src="./js/script.js"></script>
 
 </body>
 
