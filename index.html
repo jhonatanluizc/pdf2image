@@ -13,11 +13,14 @@
 		<input type="file" id="file-to-upload" accept="application/pdf" />
 		<div class="options">
 			<div class="btn" id="upload-button">Upload PDF</div>
+			<a class="btn" id="page-previous" style="display: none;">Previous</a>
 			<a class="btn" id="download-image" style="display: none;">Download PNG</a>
+			<a class="btn" id="page-next" style="display: none;">Next</a>
 			<div class="btn" id="new-upload" style="display: none;">New Upload</div>
 		</div>
+		<div id="page-info" style="display: none;"></div>
 		<div id="pdf-container" style="display: none;">
-			<canvas id="pdf-canvas" width="400"></canvas>
+			<canvas id="pdf-canvas" width="992"></canvas>
 		</div>
 	</div>
 

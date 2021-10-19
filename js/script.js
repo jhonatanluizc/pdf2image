@@ -3,11 +3,10 @@ var Main = {
     Init: function () {
 
         window.onload = function () {
-            Main.Pdf.Reset();
+            Main.Pdf.Render.Reset();
             Main.Pdf.Bind();
         }
     }(),
-
 
     Pdf: {
 
@@ -15,11 +14,30 @@ var Main = {
         TotalPages: null,
         CurrentPage: null,
 
-        Reset: function () {
-            $('#upload-button').fadeIn();
-            $('#download-image').fadeOut();
-            $('#new-upload').fadeOut();
-            $('#pdf-container').fadeOut();
+        Render: {
+
+            Reset: function () {
+                $('#upload-button').fadeIn();
+                $('#download-image').fadeOut();
+                $('#new-upload').fadeOut();
+                $('#pdf-container').fadeOut();
+                $('#page-previous').fadeOut();
+                $('#page-next').fadeOut();
+                $('#page-info').fadeOut();
+            },
+
+            Loaded: function () {
+                $('#download-image').fadeIn();
+                $('#new-upload').fadeIn();
+                $('#pdf-container').fadeIn();
+                $('#page-previous').fadeIn();
+                $('#page-next').fadeIn();
+                $('#page-info').fadeIn();
+            },
+
+            Info: function () {
+                $("#page-info").text(`Page ${Main.Pdf.CurrentPage} / ${Main.Pdf.TotalPages}`);
+            }
         },
 
         Bind: function () {
@@ -49,37 +67,66 @@ var Main = {
                 $("#upload-button").hide();
 
                 // send the object url of the pdf
-                var fileBlob = URL.createObjectURL(file);
+                var PdfBlob = URL.createObjectURL(file);
 
-                Converter.Pdf.Load(fileBlob, function (status, result) {
-
-                    if (status === 'OK') {
-                        var cavas = $('#pdf-canvas')[0];
-                        Main.Pdf.DocumentFile = result.DocumentFile;
-                        Main.Pdf.TotalPages = result.TotalPages;
-                        Main.Pdf.CurrentPage = 1;
-
-                        // show page in canvas
-                        Converter.Pdf.ShowPage(cavas, Main.Pdf.DocumentFile, Main.Pdf.CurrentPage, function () {
-                            $('#download-image').fadeIn();
-                            $('#new-upload').fadeIn();
-                            $('#pdf-container').fadeIn();
-                        });
-                    }
-
-                });
+                /// :: load pdf
+                Main.Pdf.Load(PdfBlob);
 
             });
 
             // download button
             $("#download-image").on('click', function () {
-                $(this).attr('href', canvas.toDataURL()).attr('download', 'page.png');
+                $(this).attr('href', canvas.toDataURL()).attr('download', 'page-' + Main.Pdf.CurrentPage + '.png');
             });
 
-            // download button
+            // reset 
             $("#new-upload").on('click', function () {
-                Main.Pdf.Reset();
+                Main.Pdf.Render.Reset();
             });
+
+            // previous page
+            $("#page-previous").on('click', function () {
+                Main.Pdf.Previous();
+            });
+
+            // next page
+            $("#page-next").on('click', function () {
+                Main.Pdf.Next();
+            });
+
+        },
+
+        Load: function (pdfBlob) {
+
+            Converter.Pdf.Load(pdfBlob, function (status, result) {
+
+                if (status === 'OK') {
+                    Main.Pdf.DocumentFile = result.DocumentFile;
+                    Main.Pdf.TotalPages = result.TotalPages;
+                    Main.Pdf.CurrentPage = 1;
+                    Main.Pdf.GoToPage(Main.Pdf.CurrentPage);
+                }
+            });
+        },
+        GoToPage: function (pageNumber) {
+
+            // base
+            var canvas = $('#pdf-canvas')[0];
+
+            // show page in canvas
+            Converter.Pdf.ShowPage(canvas, Main.Pdf.DocumentFile, pageNumber, function () {
+                Main.Pdf.Render.Loaded();
+                Main.Pdf.Render.Info();
+            });
+
+        },
+        Previous: function () {
+            if (Main.Pdf.CurrentPage > 1)
+                Main.Pdf.GoToPage(--Main.Pdf.CurrentPage);
+        },
+        Next: function () {
+            if (Main.Pdf.TotalPages > Main.Pdf.CurrentPage)
+                Main.Pdf.GoToPage(++Main.Pdf.CurrentPage);
         },
 
     }

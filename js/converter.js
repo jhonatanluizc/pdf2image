@@ -7,7 +7,6 @@ var Converter = {
 
         Load: function (file, callback) {
 
-            debugger
             PDFJS.getDocument({ url: file }).then(function (pdf) {
 
                 // set pdf info
@@ -48,6 +47,7 @@ var Converter = {
                 // render the page contents in the canvas
                 page.render(renderContext).then(function () {
 
+                    // check for callback
                     if (callback !== undefined) {
                         callback();
                     }
